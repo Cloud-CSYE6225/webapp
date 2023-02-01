@@ -13,6 +13,8 @@ const {
 
 const users = require('../models/userModel');
 
+let userFlag = false;
+
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages');
 
@@ -246,6 +248,9 @@ const editUser = (request, response) => {
         return response.status(403).json("Please provide Username and Password");
     }
 
+    intermediateMethodToUpdate(request, response, username);
+
+    if(!userFlag){
     users.findByPk(request.params.userId).then((result) => {
 
         const hashPassword = result.password;
@@ -255,9 +260,10 @@ const editUser = (request, response) => {
         .then((valueToCompare) => {
             if (valueToCompare) {
                  
-                intermediateMethodToUpdate(request, response, username);
+                
                 //request = obj.request;
                // response = obj.response;
+
 
                 if(result.id == request.params.userId){
 
@@ -299,6 +305,8 @@ const editUser = (request, response) => {
             
         }); 
 
+    }
+
 
    
 
@@ -318,6 +326,7 @@ const intermediateMethodToUpdate = (request, response, username) => {
         }
     })
     if (!flag) {
+        userFlag = true;
         return response.status(400).json("You can update FirstName, LastName and Password only!");
     }
 
