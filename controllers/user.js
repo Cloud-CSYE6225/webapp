@@ -44,11 +44,42 @@ const metricCounter = new statsD();
 
 const createUser = (request, response) => {
 
+    var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
 
+    if(request.body.username){
     users.findOne({where:{username:request.body.username}}).then((result) => {
-        if(result) {
+
+        let reqBody = request.body ? Object.keys(request.body) : null;
+        if (!Object.keys(request.body).length) {
+            return response.status(400).json('No Data Sent');
+        }
+    
+        const result1 = reqBody.filter(el => el === 'account_created' || el === 'account_updated' || el === 'id');
+        if (result1.length === 1) {
+            return response.status(400).json('Only first_name, last_name, username, and password is required');
+        }
+
+        const { first_name, last_name, username, password } = request.body;
+
+        const checkValidEmail = emailValidation(username);
+    
+        if (!first_name || !last_name || !username || !password || password.length < 8 || !first_name.length || !last_name.length) {
+            return response.status(400).json("Incomplete Data");
+        }
+
+        else if(result) {
             response.status(400).send('Username Already Exists');
-        }else {
+        }
+        else if(!checkValidEmail){
+            response.status(400).send('Enter valid email');
+        }
+        // else if (!regexName.test(first_name)){
+        //     response.status(400).send('Enter valid first name');
+        // }
+        // else if (!regexName.test(last_name)){
+        //     response.status(400).send('Enter valid last name');
+        // }
+        else {
 
             hashingOfPassword(request.body.password).then((hashPassword) => {
 
@@ -77,6 +108,9 @@ const createUser = (request, response) => {
 
         }
     });
+}else {
+    response.status(400).send('Incomplete Data');
+}
 
  
 }
@@ -174,14 +208,16 @@ const getUser = (request, response) =>{
 
             const hashPassword = result.password;
 
+            if(result.username == username){
             passwordCheckFunction(hashPassword, password)
             .then((valueToCompare) => {
                 if (valueToCompare) {
                     
                     const data = result;
                     //delete data["User"]["dataV"];
-                    console.log(data);
+                   // console.log(data);
                     // delete data["is_verified"];
+                    delete data.dataValues.password;
                     console.log("Data fetch successful");
                     return response.status(200).json(data); 
                 }   
@@ -190,6 +226,9 @@ const getUser = (request, response) =>{
                  }
                 
                 })
+            }else {
+                response.status(400).send('ID and username does not match');
+            }
                  
             }).catch((error) => {
                 return response.status(401).json("Error Fetching Data");
@@ -207,10 +246,11 @@ const editUser = (request, response) => {
         return response.status(403).json("Please provide Username and Password");
     }
 
-    users.findOne({where : {username:username}}).then((result) => {
+    users.findByPk(request.params.userId).then((result) => {
 
         const hashPassword = result.password;
 
+        if(result.username == username){
         passwordCheckFunction(hashPassword, password)
         .then((valueToCompare) => {
             if (valueToCompare) {
@@ -249,6 +289,10 @@ const editUser = (request, response) => {
              }
             
             })
+
+        }else {
+            response.status(400).send('ID and username does not match')
+        }
              
         }).catch((error) => {
             return response.status(401).json("Error Fetching Data");
