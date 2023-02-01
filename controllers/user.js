@@ -114,7 +114,6 @@ const createUser = (request, response) => {
 
  
 }
-
 const creationOfUser = (request, response) => {
     const id = uuidv4();
     logger.info("User Creation Post Call");
@@ -236,7 +235,6 @@ const getUser = (request, response) =>{
             }); 
 
 };
-
 //PUT Method
 
 const editUser = (request, response) => {
