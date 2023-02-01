@@ -266,6 +266,7 @@ const editUser = (request, response) => {
                 if(result.id == request.params.userId){
 
                 users.update(request.body, {where:{id: request.params.userId}}).then((updatedData) => {
+                   // response.status(200).send(updatedData);
                     response.status(200).send('Data is Updated')
                     console.log('updated');
                 }).catch((error)=> {
