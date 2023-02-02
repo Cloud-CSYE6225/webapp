@@ -21,20 +21,6 @@ const { CommandCompleteMessage } = require('pg-protocol/dist/messages');
 
 const metricCounter = new statsD();
 
-//creating a new user
-
-// const users = sequelize.define('Users', {
-//     id: {
-//         primaryKey: true,
-//         type: DataTypes.BIGINT,
-//     },
-//     first_name: DataTypes.STRING,
-//     last_name: DataTypes.STRING,
-//     username: DataTypes.STRING,
-//     password: DataTypes.STRING,
-//     account_created:DataTypes.DATE,
-//     account_updated: DataTypes.DATE
-// },{ tableName: users });
 
 
 //POST Method
@@ -70,12 +56,7 @@ const createUser = (request, response) => {
         else if(!checkValidEmail){
             response.status(400).send('Enter valid email');
         }
-        // else if (!regexName.test(first_name)){
-        //     response.status(400).send('Enter valid first name');
-        // }
-        // else if (!regexName.test(last_name)){
-        //     response.status(400).send('Enter valid last name');
-        // }
+     
         else {
 
             hashingOfPassword(request.body.password).then((hashPassword) => {
@@ -95,11 +76,7 @@ const createUser = (request, response) => {
                 }).catch((error) => {
                     console.log(error);
                 });
-                // if (users) {
-                //     response.status(200).send('Data is inserted into the Table');
-                // } else {
-                //     response.status(400).send('Error in insert new record');
-                // }
+               
         
             });
 
@@ -111,85 +88,7 @@ const createUser = (request, response) => {
 
  
 }
-const creationOfUser = (request, response) => {
-    const id = uuidv4();
-    logger.info("User Creation Post Call");
-    metricCounter.increment('POST/v1/account');
-    let reqBody = request.body ? Object.keys(request.body) : null;
-    if (!Object.keys(request.body).length) {
-        return response.status(400).json('No Data Sent');
-    }
 
-    const result = reqBody.filter(el => el === 'account_created' || el === 'account_updated' || el === 'id');
-    if (result.length === 1) {
-        return response.status(400).json('Only first_name, last_name, username, and password is required');
-    }
-
-    const account_created = new Date().toISOString();
-    const account_updated = new Date().toISOString();
-
-    const { first_name, last_name, username, password } = request.body;
-
-    const checkValidEmail = emailValidation(username);
-
-    if (!first_name || !last_name || !username || !password || password.length < 8 || !first_name.length || !last_name.length) {
-        return response.status(400).json("Incomplete Data");
-    }
-
-    if (!checkValidEmail) {
-        return response.status(400).json("Enter Valid Email Address.");
-    }
-
-    const elapsedTime = 2 * 60;
-    const initialTime = Math.round(Date.now() / 1000);
-    const expiryTime = initialTime + elapsedTime;
-    const oneTimeToken = randomStringAsBase64Url(20);
-    logger.info("One time token is generated");
-
-
-    // hashingOfPassword(password)
-    //     .then((hashPassword) => {
-    //         let queries = "SELECT * FROM users WHERE username = $1";
-    //         pool.query(queries, [username], (err, result) => {
-    //             if (!result.rowCount) {
-
-    //                 queries = "INSERT INTO users(first_name, last_name, password, username, account_created, account_updated, id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, first_name, last_name, username, account_created, account_updated";
-    //                 const valueToIngest = [first_name, last_name, hashPassword, username, account_created, account_updated, id];
-    //                 pool.query(queries, valueToIngest, (error, results) => {
-    //                     if (error) {
-    //                         console.log(error);
-    //                         logger.info('error');
-    //                         return response.status(400).json("Error Inserting Data in Database. Please try again later.");
-    //                     } else {
-
-    //                         logger.info('User successfully created');
-    //                         return response.status(201).json(results.rows[0], expiryTime, oneTimeToken);
-    //                     }
-    //                 })
-
-    // return  users.create({
-    //     id: request.body.id,
-    //     first_name: request.body.first_name,
-    //     last_name: request.body.last_name,
-    //     username: request.body.username,
-    //     password:request.body.password,
-    //     account_created:request.body.account_created,
-    //     account_updated:request.body.account_updated,
-    // }).then(function (users) {
-    //     if (users) {
-    //         response.send('Success');
-    //     } else {
-    //         response.status(400).send('Error in insert new record');
-    //     }
-    // });
-
-    //         } else {
-    //             return response.status(400).json("User already exists.");
-    //         }
-    //     })
-    // });
-
-}
 
 // GET method
 
@@ -252,12 +151,7 @@ const editUser = (request, response) => {
         passwordCheckFunction(hashPassword, password)
         .then((valueToCompare) => {
             if (valueToCompare) {
-                 
-                
-                //request = obj.request;
-               // response = obj.response;
-
-
+               
                 if(result.id == request.params.userId){
 
                 users.update(request.body, {where:{id: request.params.userId}}).then((updatedData) => {
@@ -332,33 +226,17 @@ const intermediateMethodToUpdate = (request, response, username) => {
     if (password) {
         hashingOfPassword(password)
             .then((hashPassword) => {
-                // request.body.password = hashPassword;
-                // return hashPassword;
-                // detailsUpdationHandler(request, response, username, account_updated);
+                
             })
     } else {
-        // detailsUpdationHandler(request, response, username, account_updated);
-        // return {request: request, response: response, account_updated: account_updated};
+        
     }
 }
 
-const detailsUpdationHandler = (request, response, username, account_updated) => {
-    const dKeys = Object.keys(request.body);
-    dKeys.push("account_updated");
-    const dataTuples = dKeys.map((k, index) => `${k} = $${index + 1}`);
-    const updates = dataTuples.join(", ");
-
-    const queries = `UPDATE users SET ${updates} WHERE username = $${dKeys.length + 1}`;
-    const values = [...Object.values(request.body), account_updated, username];
-
-    pool.query(queries, values, (err, result) => {
-        if (err) {
-            response.status(400).json("Error! Update Failed");
-        } else {
-            response.status(204).json(result.rows[0])
-        }
-    })
+const getHealth = (request, response) => {
+    return response.status(200).json("Health is OK");
 }
+
 
 /**
  * Controller to handle the User details update.
@@ -408,50 +286,12 @@ const detailsUpdationHandler = (request, response, username, account_updated) =>
  * @param {*} response 
  */
 
-// Fetching user data method
 
-// const retrieveUser = (request, response) => {
-//     logger.info("Get Call for User Retrieval G");
-//     metricCounter.increment('GET/user/getUser/accountID');
-//     const [username, password] = basicAuthenticationHandler(request);
-
-//     if (!username || !password) {
-//         return response.status(403).json("Please provide Username and Password");
-//     }
-
-//     let query = "SELECT * FROM users WHERE username = $1";
-//     let values = [username];
-//     pool.query(query, values)
-//         .then(result => {
-//             if (result.rowCount) {
-//                 const {
-//                     password: hashPassword
-//                 } = result.rows[0];
-//                 passwordCheckFunction(hashPassword, password)
-//                     .then(valueToCompare => {
-//                         if (valueToCompare) {
-//                             const data = result.rows[0];
-//                             delete data["password"];
-//                             // delete data["is_verified"];
-//                             return response.status(200).json(data);
-//                         } else {
-//                             return response.status(401).json("Invalid Password");
-//                         }
-//                     })
-//             } else {
-//                 return response.status(401).json("Username does not exist");
-//             }
-//         })
-//         .catch(err => {
-//             return response.status(400).json(err.message)
-//         })
-// }
 
 module.exports = {
     createUser,
     getUser,
-    editUser
-    // creationOfUser,
-    // updatingUser,
-    // retrieveUser
+    editUser,
+    getHealth
+ 
 }

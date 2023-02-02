@@ -10,8 +10,8 @@ userRouter.route('/:userId')
     .get(userController.getUser);
 
 
-// userRouter.route('/getUser')
-//     .get(userController.retrieveUser)
+userRouter.route('/')
+    .get(userController.getHealth);
 
 userRouter.route('/:userId')  
     .put(userController.editUser);
