@@ -18,11 +18,6 @@ let userFlag = false;
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages');
 
-// const sequelize = new Sequelize('mydb', 'postgres', 'postgresql', {
-//     host: 'localhost',
-//     dialect: 'postgres',
-//     port:'5432',
-//   });
 
 const metricCounter = new statsD();
 
