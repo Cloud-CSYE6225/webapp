@@ -8,7 +8,10 @@ const userRouter = require("./user");
 
 const routes = (app) => {
     app.use("/v1/user", userRouter);
-    
+    app.use("/healthz",userRouter);
+
+  
 }
+
 
 module.exports = routes;
