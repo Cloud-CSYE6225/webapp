@@ -27,3 +27,27 @@ we have also created a .github/workflows folder/file which contains the yml file
 Whenever a pull request us created from our feature branch in our fork to the main branch in our org, workflow is triggered and checks if all the test cases are passing.
 
 Only if all test cases are passing, then we should be able to merge our changes.
+
+#Assignment 2
+
+In this assignment we have added a ProductModel where it contains the fields name, description, manufacturer, sku and quantity.
+
+There are 5 apis being used here and the endpoints are as follows
+
+POST: http://localhost:3000/v1/product
+
+GET: http://localhost:3000/v1/product/productId
+
+PUT: http://localhost:3000/v1/product/productId
+
+PATCH: http://localhost:3000/v1/product/productId
+
+DELETE: http://localhost:3000/v1/product/productId
+
+SOme requirements for this assignment are-
+
+-Only authenticated users are allowed to add products
+-Only people who added a product can update and delete the product
+-Anyone can use the get method to fetch products.
+
+

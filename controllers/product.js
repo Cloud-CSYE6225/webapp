@@ -32,6 +32,12 @@ const createProduct = (request, response) => {
         response.status(400).send('Quantity Should be in between 0 and 100');
     }
 
+    let returnValue = null;
+    returnValue = intermediateMethodToUpdate(request, response, username);
+    if(returnValue !== true) {
+        return;
+    }
+
     users.findOne({ where: { username: username } }).then((user) => {
 
         if (user) {
@@ -318,7 +324,7 @@ const intermediateMethodToUpdate = (request, response, username) => {
     })
     if (!flag) {
         userFlag = true;
-        return response.status(403).json("You can update name, description,manufacturer,sku and quantity only!");
+        return response.status(403).json("You can add or update name, description,manufacturer,sku and quantity only!");
     }
 
     //const account_updated = new Date().toISOString();
@@ -374,7 +380,7 @@ const deleteProduct = (request, response) => {
         }
 
     }).catch((error) => {
-        response.send('error fetching user');
+        response.status(400).send('error fetching user');
     });
 
 
