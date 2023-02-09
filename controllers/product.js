@@ -132,6 +132,12 @@ const updateProduct = (request, response) => {
         return response.status(401).json("Please provide Username and Password");
     }
 
+    const { name, description, sku, manufacturer, quantity } = request.body;
+
+    if (!name || !description || !sku || !manufacturer || !quantity) {
+        return response.status(400).json("Incomplete Data");
+    }
+
    // intermediateMethodToUpdate(request, response, username);
 
    let returnValue = null;
@@ -163,10 +169,10 @@ const updateProduct = (request, response) => {
                                         else{
                                             products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
                                       
-                                                response.status(200).send('Data is Updated');
+                                                response.status(204).send('Data is Updated');
                                                 
                                              }).catch((error)=> {
-                                                 response.send("Error updating Data")
+                                                 response.status(400).send("Error updating Data")
                                              });
                                         }
                                     })
@@ -174,10 +180,10 @@ const updateProduct = (request, response) => {
                                    else {
                                     products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
                                       
-                                        response.status(200).send('Data is Updated');
+                                        response.status(204).send('Data is Updated');
                                         
                                      }).catch((error)=> {
-                                         response.send("Error updating Data")
+                                         response.status(400).send("Error updating Data")
                                      });
             
                                     }
@@ -196,14 +202,14 @@ const updateProduct = (request, response) => {
                         response.status(403).send('Product not added by ' + user.username);
                     }
                 } else {
-                    response.status(404).send('Product with sku ' + request.params.productId + " does not exist");
+                    response.status(400).send('Product with sku ' + request.params.productId + " does not exist");
                 }
                
             })
 
           
         }else {
-            response.send('No user found');
+            response.status(401).send('No user found');
         }
 
     }).catch((error) => {
@@ -262,10 +268,10 @@ const editProduct = (request,response) => {
                                         };
                                         products.update(patchProduct, {where:{sku: request.params.productId}}).then((updatedData) => {
                                   
-                                            response.status(200).send('Data is Updated');
+                                            response.status(204).send('Data is Updated');
                                             
                                          }).catch((error)=> {
-                                             response.send("Error updating Data")
+                                             response.status(400).send("Error updating Data")
                                          });
                                     }
                                 })
@@ -273,10 +279,10 @@ const editProduct = (request,response) => {
                                else {
                                 products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
                                   
-                                    response.status(200).send('Data is Updated');
+                                    response.status(204).send('Data is Updated');
                                     
                                  }).catch((error)=> {
-                                     response.send("Error updating Data")
+                                     response.status(400).send("Error updating Data")
                                  });
         
                                 }
@@ -295,13 +301,13 @@ const editProduct = (request,response) => {
                     response.status(403).send('Product not added by ' + user.username);
                 }
             }else {
-                response.status(404).send('Product with sku ' + request.params.productId +' does not exist');
+                response.status(400).send('Product with sku ' + request.params.productId +' does not exist');
             }
             })
 
           
         }else {
-            response.status(404).send('No user found');
+            response.status(401).send('No user found');
         }
 
     }).catch((error) => {
@@ -356,9 +362,9 @@ const deleteProduct = (request, response) => {
                     passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
                         if (valueToCompare) {
                             products.destroy({where:{sku:request.params.productId}}).then((result) => {
-                                response.status(200).send('Data deleted');
+                                response.status(204).send('Data deleted');
                             }).catch((error) => {
-                                response.send('Data destroy failed');
+                                response.status(400).send('Data destroy failed');
                             })
                         }else {
                             response.status(401).send('Invalid Password');
