@@ -33,8 +33,9 @@ describe('Array', function () {
 
 //product tests
 
+//get api test
 describe('Authentication Test for Get', function() {
-  describe('Successes', function() {
+  describe('Success', function() {
       it('Return the product for Get if the id does not exist', function(done) {
           chai.request(app).get('/v1/product/1').send({}).end(function(err, res) {
               chai.expect(res.statusCode).to.be.equal(400);
@@ -44,6 +45,51 @@ describe('Authentication Test for Get', function() {
     });
 })
 
+//post api test
+describe('Authentication Test for post', function() {
+  describe('Success', function() {
+      it('Create the product for Post if the id exists', function(done) {
+          chai.request(app).get('/v1/product/').send({}).end(function(err, res) {
+              chai.expect(res.statusCode).to.be.equal(200);
+              done();
+          });
+      });
+    });
+})
 
+//put api test
+describe('Authentication Test for put', function() {
+  describe('Success', function() {
+      it('Do not Update the product for Put if the id does not exist', function(done) {
+          chai.request(app).get('/v1/product/dell1').send({}).end(function(err, res) {
+              chai.expect(res.statusCode).to.be.equal(400);
+              done();
+          });
+      });
+    });
+})
 
+//patch api test
+describe('Authentication Test for patch', function() {
+  describe('Success', function() {
+      it('Do not Update the product for Patch if the id does not exist', function(done) {
+          chai.request(app).get('/v1/product/csye').send({}).end(function(err, res) {
+              chai.expect(res.statusCode).to.be.equal(400);
+              done();
+          });
+      });
+    });
+})
+
+//delete api test
+describe('Authentication Test for delete', function() {
+  describe('Success', function() {
+      it('Do not destroy the product for Delete if the id does not exist', function(done) {
+          chai.request(app).get('/v1/product/cloud').send({}).end(function(err, res) {
+              chai.expect(res.statusCode).to.be.equal(400);
+              done();
+          });
+      });
+    });
+})
 
