@@ -85,8 +85,8 @@ describe('Authentication Test for patch', function() {
 describe('Authentication Test for delete', function() {
   describe('Success', function() {
       it('Do not destroy the product for Delete if the id does not exist', function(done) {
-          chai.request(app).delete('/v1/product/plokij').send({}).end(function(err, res) {
-              chai.expect(res.statusCode).to.be.equal(200);
+          chai.request(app).delete('/v1/product/assign').send({}).end(function(err, res) {
+              chai.expect(res.statusCode).to.be.equal(400);
               done();
           });
       });

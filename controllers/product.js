@@ -49,7 +49,7 @@ const createProduct = (request, response) => {
 
                     
 
-                    if (!name || !description || !sku || !manufacturer) {
+                    if (!name || !description || !sku || !manufacturer || quantity) {
                         return response.status(400).json("Incomplete Data");
                     }
 
