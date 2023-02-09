@@ -23,6 +23,8 @@ userModel.sync().then((result) => {
    console.log('Error in creating product table');
 });
 
+productModel.belongsTo(userModel, {foreignKey: 'owner_user_id'});
+
 
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
