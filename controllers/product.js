@@ -14,6 +14,8 @@ const products = require('../models/productModel');
 const users = require('../models/userModel');
 const { response } = require('../app');
 
+let userFlag = false;
+
 //POST Method
 
 const createProduct = (request, response) => {
@@ -51,7 +53,7 @@ const createProduct = (request, response) => {
 
                     products.findOne({ where: { sku: sku } }).then((product) => {
                         if (product) {
-                            return response.status(400).send(res.generate(true, 'Product Already Exists', 400, {}));
+                            return response.status(400).send(res.generate(true, 'Product with same sku Already Exists', 400, {}));
                         }
                         else {
 
@@ -102,7 +104,12 @@ const createProduct = (request, response) => {
 const getProduct = (request, response) => {
 
     products.findByPk(request.params.productId).then((result) => {
-        return response.status(200).send(res.generate(false,'Product fetched', 200, result));
+        if(result){
+            return response.status(200).send(res.generate(false,'Product fetched', 200, result));
+        }else {
+            return response.status(400).send(res.generate(true,'Product with sku ' + request.params.productId +' does not exist', 400, result));
+        }
+        
     }).catch((error) => {
         return response.status(400).send(res.generate(true,'Product fetch failed', 400, {}));
     })
@@ -119,60 +126,73 @@ const updateProduct = (request, response) => {
         return response.status(401).json("Please provide Username and Password");
     }
 
+   // intermediateMethodToUpdate(request, response, username);
+
+   let returnValue = null;
+                returnValue = intermediateMethodToUpdate(request, response, username);
+                if(returnValue !== true) {
+                    return;
+                }
+
     users.findOne({ where: { username: username } }).then((user) => {
 
         if (user) {
 
             products.findOne({where:{sku:request.params.productId}}).then((record) => {
-                if(record.owner_user_id == user.id){
+                if(record) {
+                    if(record.owner_user_id == user.id){
 
-                    const hashPassword = user.password;
-
-                    passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
-                        if (valueToCompare) {
-        
-                               // console.log("sku is " + request.body.sku);
-                               if(request.body.sku){
-                                products.findOne({where:{sku:request.body.sku}}).then((result) => {
-                                    if(result){
-                                        response.send("sku "+ request.body.sku + " already exists");
+                        const hashPassword = user.password;
+    
+                        passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
+                            if (valueToCompare) {
+            
+                                   // console.log("sku is " + request.body.sku);
+                                   if(request.body.sku){
+                                    products.findOne({where:{sku:request.body.sku}}).then((result) => {
+                                        if(result){
+                                            response.send("sku "+ request.body.sku + " already exists");
+                                        }
+                                      
+                                        else{
+                                            products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
+                                      
+                                                response.status(200).send('Data is Updated');
+                                                
+                                             }).catch((error)=> {
+                                                 response.send("Error updating Data")
+                                             });
+                                        }
+                                    })
+                                   }
+                                   else {
+                                    products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
+                                      
+                                        response.status(200).send('Data is Updated');
+                                        
+                                     }).catch((error)=> {
+                                         response.send("Error updating Data")
+                                     });
+            
                                     }
-                                  
-                                    else{
-                                        products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
-                                  
-                                            response.status(200).send('Data is Updated');
-                                            
-                                         }).catch((error)=> {
-                                             response.send("Error updating Data")
-                                         });
-                                    }
-                                })
-                               }
-                               else {
-                                products.update(request.body, {where:{sku: request.params.productId}}).then((updatedData) => {
-                                  
-                                    response.status(200).send('Data is Updated');
-                                    
-                                 }).catch((error)=> {
-                                     response.send("Error updating Data")
-                                 });
-        
-                                }
-        
-                                 products.update({date_last_updated:new Date().toISOString()},{where:{sku: request.params.productId}}).catch((error)=>
-                                 {
-                                    response.send('error updating date_last_updated');
-                                 });
-                           
-                        } else {
-                            response.status(401).send(res.generate(true,'Invalid Password',401,{}));
-                        }
-                    });
-
-                }else {
-                    response.status(403).send('Product not added by ' + user.username);
+            
+                                     products.update({date_last_updated:new Date().toISOString()},{where:{sku: request.params.productId}}).catch((error)=>
+                                     {
+                                        response.send('error updating date_last_updated');
+                                     });
+                               
+                            } else {
+                                response.status(401).send(res.generate(true,'Invalid Password',401,{}));
+                            }
+                        });
+    
+                    }else {
+                        response.status(403).send('Product not added by ' + user.username);
+                    }
+                } else {
+                    response.status(404).send('Product with sku ' + request.params.productId + " does not exist");
                 }
+               
             })
 
           
@@ -186,6 +206,7 @@ const updateProduct = (request, response) => {
     });
 
 
+
 }
 
 //Patch Method
@@ -197,11 +218,18 @@ const editProduct = (request,response) => {
         return response.status(401).json("Please provide Username and Password");
     }
 
+    let returnValue = null;
+                returnValue = intermediateMethodToUpdate(request, response, username);
+                if(returnValue !== true) {
+                    return;
+                }
+
     users.findOne({ where: { username: username } }).then((user) => {
 
         if (user) {
 
             products.findOne({where:{sku:request.params.productId}}).then((record) => {
+                if(record){
                 if(record.owner_user_id == user.id){
 
                     const hashPassword = user.password;
@@ -260,6 +288,9 @@ const editProduct = (request,response) => {
                 }else {
                     response.status(403).send('Product not added by ' + user.username);
                 }
+            }else {
+                response.status(404).send('Product with sku ' + request.params.productId +' does not exist');
+            }
             })
 
           
@@ -274,7 +305,7 @@ const editProduct = (request,response) => {
 }
 
 const intermediateMethodToUpdate = (request, response, username) => {
-    const importantFields = ["name", "description", "manufacturer","quantity"];
+    const importantFields = ["name", "description", "manufacturer","sku","quantity"];
     const RequestBodyKeys = request.body ? Object.keys(request.body) : null;
     let flag = true;
     if (!RequestBodyKeys || !RequestBodyKeys.length) {
@@ -287,10 +318,12 @@ const intermediateMethodToUpdate = (request, response, username) => {
     })
     if (!flag) {
         userFlag = true;
-        return response.status(403).json("You can update name, description,manufacturer and quantity only!");
+        return response.status(403).json("You can update name, description,manufacturer,sku and quantity only!");
     }
 
-    const account_updated = new Date().toISOString();
+    //const account_updated = new Date().toISOString();
+
+    return true;
  
 }
 
@@ -309,6 +342,7 @@ const deleteProduct = (request, response) => {
         if (user) {
 
             products.findOne({where:{sku:request.params.productId}}).then((record) => {
+                if(record){
                 if(record.owner_user_id == user.id){
 
                     const hashPassword = user.password;
@@ -328,6 +362,9 @@ const deleteProduct = (request, response) => {
                 } else {
                     response.status(403).send('Product not added by ' + user.username);
                 }
+            }else {
+                response.status(404).send('Product with sku ' + request.params.productId +' does not exist');
+            }
             })
 
          
