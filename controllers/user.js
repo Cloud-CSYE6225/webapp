@@ -221,7 +221,7 @@ const intermediateMethodToUpdate = (request, response, username) => {
     const account_updated = new Date().toISOString();
     const { first_name, last_name, password } = request.body;
     if ((password && password.length < 8) || (first_name && !first_name.length) || (last_name && !last_name.length)) {
-        return response.status(400).json("Incorrect Credentials");
+        return response.status(401).json("Incorrect Credentials");
     }
     if (password) {
         hashingOfPassword(password)

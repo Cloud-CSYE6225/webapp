@@ -1,4 +1,5 @@
 
+//user.js tests
 
 var assert = require('assert');
 describe('Array', function () {

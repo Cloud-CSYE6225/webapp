@@ -14,5 +14,11 @@ productRouter.route('/:productId')
 
 productRouter.route('/:productId')
     .put(productController.updateProduct);
+    
+productRouter.route('/:productId')
+.patch(productController.editProduct);
+
+productRouter.route('/:productId')
+    .delete(productController.deleteProduct);
 
 module.exports = productRouter;
