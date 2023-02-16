@@ -378,7 +378,9 @@ const deleteProduct = (request, response) => {
             }else {
                 response.status(404).send('Product with productId ' + request.params.productId +' does not exist');
             }
-            })
+            }).catch((error) => {
+                response.status(400).send('"Error Deleting Data');
+            });
 
          
 
