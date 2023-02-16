@@ -46,13 +46,18 @@ const createProduct = (request, response) => {
                 if (valueToCompare) {
 
                     
-                    console.log(!quantity);
+                    //console.log(!quantity);
                     if ((!name || !description || !sku || !manufacturer || !quantity) && quantity!= 0) {
                         return response.status(400).json("Incomplete Data");
                     }
 
                     else if (quantity<0 && quantity>100 && quantity.isInteger()){
                         return response.status(400).send('Quantity Should be in between 0 and 100');
+                    }
+
+                    else if (typeof quantity === 'string' ){
+                        return response.status(400).json("Bad Request, quantity must be an integer");
+
                     }
                     
 
@@ -385,7 +390,7 @@ const deleteProduct = (request, response) => {
          
 
         } else {
-            response.status(404).send('User not found');
+            response.status(401).send('User not found');
         }
 
     }).catch((error) => {
