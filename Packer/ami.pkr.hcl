@@ -14,7 +14,13 @@ variable "aws_secret_key" {
   default = "lT/Heagaju+6svXNl4ERM4rqP62n9/dcn6CuaxCF"
 }
 
+variable "source_ami" {
+  type = string
+  default = "ami-0dfcb1ef8550277af"
+}
+
 data "amazon-ami" "awsdev_ami" {
+  id = "${var.source_ami}"
   access_key = "${var.aws_access_key}"
   filters = {
     name                = "amzn2-ami-hvm-*"
