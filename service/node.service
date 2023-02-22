@@ -1,0 +1,20 @@
+[Unit]
+Description=webapp nodejs Application
+After=node.service
+
+[Service]
+Type=simple
+Environment=NODE_PORT=3000
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=webapp
+User=ec2-user
+WorkingDirectory=/home/ec2-user/webapp
+ExecStart= /bin/node /home/ec2-user/webapp/index.js
+
+
+[Install]
+WantedBy=multi-user.target
+

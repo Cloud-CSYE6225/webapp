@@ -25,5 +25,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: CI=true npm test
+    - run: |
+          cd Packer
+          packer init .
+          packer fmt .
+          packer validate .
     env:
       CI: true
