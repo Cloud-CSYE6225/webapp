@@ -20,7 +20,7 @@ variable "source_ami" {
 }
 
 data "amazon-ami" "awsdev_ami" {
-  id = "${var.source_ami}"
+  // id = "${var.source_ami}"
   access_key = "${var.aws_access_key}"
   filters = {
     name                = "amzn2-ami-hvm-*"
