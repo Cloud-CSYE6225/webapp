@@ -24,6 +24,7 @@
             "instance_type": "t2.micro",
             "ssh_username": "ec2-user",
             "ami_name": "Custom AMI",
+            "ami_users": ["181600461636"],
             "tags": {
                 "Name": "Custom AMI"
             }
