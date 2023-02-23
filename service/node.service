@@ -5,12 +5,9 @@ After=node.service
 [Service]
 Type=simple
 
-Environment=DB_USER="postgres"
-Environment=DB_PASSWORD= "postgresql"
-Environment=DB_NAME="mydb"
-Environment=DB_HOST="localhost"
+
 Environment=PORT=3000
-Environment=DB_PORT=5432
+
 
 Restart=always
 RestartSec=10
@@ -19,7 +16,7 @@ StandardError=syslog
 SyslogIdentifier=webapp
 User=ec2-user
 WorkingDirectory=/home/ec2-user/webapp
-ExecStart= /bin/node /home/ec2-user/webapp/index.js
+ExecStart= /usr/bin/node /home/ec2-user/webapp/index.js
 
 
 
