@@ -13,9 +13,9 @@ sudo yum install -y nodejs
 
 
 sudo yum install unzip
-unzip /home/ec2-user/webapp.zip
-sudo chmod 755 webapp/
-cd ./webapp
+unzip /home/ec2-user/webApp.zip
+sudo chmod 755 webApp/
+cd ./webApp
 sudo npm i
 sudo npm i bcrypt
 
