@@ -15,7 +15,6 @@ StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=webapp
 User=ec2-user
-WorkingDirectory=/home/ec2-user/webapp
 ExecStart= /usr/bin/node /home/ec2-user/webapp/index.js
 
 
