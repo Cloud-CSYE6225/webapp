@@ -33,9 +33,14 @@ data "amazon-ami" "awsdev_ami" {
   secret_key  = "${var.aws_secret_key}"
 }
 
+locals {
+  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
+
 source "amazon-ebs" "Custom_AMI" {
   access_key    = "${var.aws_access_key}"
-  ami_name      = "Custom AMI"
+  ami_name      = "Aws_AMI-${local.timestamp}"
   ami_users     = ["181600461636"]
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
