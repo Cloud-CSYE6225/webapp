@@ -4,7 +4,7 @@ After=node.service
 
 [Service]
 Type=simple
-Environment=NODE_PORT=3000
+
 Restart=always
 RestartSec=10
 StandardOutput=syslog
@@ -13,6 +13,14 @@ SyslogIdentifier=webapp
 User=ec2-user
 WorkingDirectory=/home/ec2-user/webapp
 ExecStart= /bin/node /home/ec2-user/webapp/index.js
+
+
+Environment=DB_USER="postgres"
+Environment=DB_PASSWORD= "postgressql"
+Environment=DB_NAME="postgres"
+Environment=DB_HOST="localhost"
+Environment=PORT=3000
+Environment=DB_PORT=5432
 
 
 [Install]
