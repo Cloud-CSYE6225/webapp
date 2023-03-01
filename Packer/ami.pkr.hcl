@@ -1,5 +1,5 @@
 
-variable "aws_access_key" 
+variable "aws_access_key" {
   type    = string
   default = "AKIAWS3YNDQKINEDVOEK"
 }
