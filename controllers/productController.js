@@ -449,6 +449,6 @@ module.exports = {
     editProduct,
     getHealth,
     deleteProduct,
-    createProductImage
+    
 
 }
