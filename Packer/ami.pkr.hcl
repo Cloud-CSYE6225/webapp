@@ -82,6 +82,10 @@ build {
     destination = "/tmp/node.service"
     source      = "../service/node.service"
   }
+  
+   provisioner "shell" {
+    inline = ["cd /home/ec2-user", "mkdir script"]
+  }
 
   provisioner "file" {    
     destination = "/home/ec2-user/script/webApp.zip"
@@ -92,9 +96,7 @@ build {
     inline = ["sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
   }
 
-  provisioner "shell" {
-    inline = ["cd /home/ec2-user", "mkdir script"]
-  }
+ 
 
   provisioner "shell" {
     inline = ["rpm -Va --nofiles --nodigest"]
