@@ -19,12 +19,7 @@ app.use(fileUpload({
 
 const PORT = process.env.PORT || 3000;
 
-s3 = new AWS.S3({
-   region:"us-east-1",   
-   accessKeyId: process.env.AWS_ACCESS_KEY,
-   secretAccessKey: process.env.AWS_SECRET,
-   
-})
+s3 = new AWS.S3({});
 
 // const SESConfig = {
 //    apiVersion: "2010-12-01",

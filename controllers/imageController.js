@@ -69,7 +69,7 @@ users.findOne({ where: { username: username } }).then((user) => {
                         if (valueToCompare) {
         
                             const UploadParams = {
-                                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                                Bucket: process.env.S3_BUCKET_NAME,
                                 Key: `${request.file.originalname}--${uniqueId}`,
                                Body: Buffer.from(request.file.path),
                                 ContentType: request.file.mimetype,
@@ -285,7 +285,7 @@ debugger;
                             console.log(filename);
                         
                             var deleteParam = {
-                                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                                Bucket: process.env.S3_BUCKET_NAME,
                                 Key: filename
                           
                             };
