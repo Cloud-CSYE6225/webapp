@@ -1,17 +1,17 @@
 
 variable "aws_access_key" {
   type    = string
-  default = "AKIAWS3YNDQKINEDVOEK"
+ // default = env.AWS_ACCESS_KEY_ID
 }
 
 variable "aws_region" {
   type    = string
-  default = "us-east-1"
+ // default = env(AWS_REGION)
 }
 
 variable "aws_secret_key" {
   type    = string
-  default = "lT/Heagaju+6svXNl4ERM4rqP62n9/dcn6CuaxCF"
+  //default = env(AWS_SECRET_ACCESS_KEY)
 }
 
 variable "source_ami" {
@@ -19,9 +19,20 @@ variable "source_ami" {
   default = "ami-0dfcb1ef8550277af"
 }
 
+variable "ssh_username" {
+  type = string
+  default = "ec2-user"
+}
+
+variable "demo_accountid" {
+  type = string
+  default = "181600461636"
+}
+
 data "amazon-ami" "awsdev_ami" {
   // id = "${var.source_ami}"
   access_key = "${var.aws_access_key}"
+//access_key = env(AWS_ACCESS_KEY_ID)
   filters = {
     name                = "amzn2-ami-hvm-*"
     root-device-type    = "ebs"
@@ -30,7 +41,9 @@ data "amazon-ami" "awsdev_ami" {
   most_recent = true
   owners      = ["amazon"]
   region      = "${var.aws_region}"
+  //region = env(AWS_REGION)
   secret_key  = "${var.aws_secret_key}"
+  //secret_key = env(AWS_SECRET_ACCESS_KEY)
 }
 
 locals {
@@ -41,12 +54,12 @@ locals {
 source "amazon-ebs" "Custom_AMI" {
   access_key    = "${var.aws_access_key}"
   ami_name      = "Aws_AMI-${local.timestamp}"
-  ami_users     = ["181600461636"]
+  ami_users     = ["${var.demo_accountid}"]
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
   secret_key    = "${var.aws_secret_key}"
   source_ami    = "${data.amazon-ami.awsdev_ami.id}"
-  ssh_username  = "ec2-user"
+  ssh_username  = "${var.ssh_username}"
   tags = {
     Name = "Custom AMI"
   }
