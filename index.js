@@ -46,8 +46,9 @@ userModel.sync().then((result) => {
      console.log('Error in creating product table');
   });
 }).catch((error) => {
-   console.log('Error in creating user table');
- });
+   console.log('Error in creating user table');
+   console.log(error);
+});
 
 productModel.belongsTo(userModel, {foreignKey: 'owner_user_id'});
 

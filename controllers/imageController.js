@@ -67,6 +67,8 @@ users.findOne({ where: { username: username } }).then((user) => {
 
                     passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
                         if (valueToCompare) {
+
+                            if(request.file){
         
                             const UploadParams = {
                                 Bucket: process.env.S3_BUCKET_NAME,
@@ -98,6 +100,10 @@ users.findOne({ where: { username: username } }).then((user) => {
                         
                         
                           })
+
+                        }else {
+                            response.status(400).send("No file Uploaded");
+                        }
                            
                         } else {
                             response.status(401).send(res.generate(true,'Invalid Password',401,{}));
