@@ -1,8 +1,7 @@
-sleep 15
-
 
 
 sudo yum update -y
+sudo yum upgrade -y
 
 
 
