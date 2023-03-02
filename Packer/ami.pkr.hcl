@@ -83,13 +83,13 @@ build {
     source      = "../service/node.service"
   }
 
-  provisioner "file" {
-    destination = "/home/ec2-user/webApp.zip"
+  provisioner "file" {    
+    destination = "/home/ec2-user/scripts/webApp.zip"
     source      = "../webApp.zip"
   }
 
   provisioner "shell" {
-    inline = ["sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
+    inline = ["sudo mkdir /home/ec2-user/scripts", "sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
   }
 
   provisioner "shell" {
