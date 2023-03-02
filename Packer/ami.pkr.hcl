@@ -89,7 +89,11 @@ build {
   }
 
   provisioner "shell" {
-    inline = ["sudo mkdir /home/ec2-user/scripts", "sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
+    inline = ["sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
+  }
+
+  provisioner "shell" {
+    inline = ["cd /home/ec2-user", "mkdir script"]
   }
 
   provisioner "shell" {
