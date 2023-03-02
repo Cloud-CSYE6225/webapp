@@ -25,3 +25,4 @@ cd /home/ec2-user/script
 sudo npm install
 sudo npm install bcrypt
 sudo npm update -g node-gyp
+

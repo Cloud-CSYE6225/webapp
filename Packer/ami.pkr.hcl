@@ -82,9 +82,13 @@ build {
     destination = "/tmp/node.service"
     source      = "../service/node.service"
   }
-  
+
    provisioner "shell" {
     inline = ["cd /home/ec2-user", "mkdir script"]
+  }
+   
+   provisioner "shell" {
+    inline = ["sudo mv /tmp/node.service /etc/systemd/system/node.service"]
   }
 
   provisioner "file" {    
