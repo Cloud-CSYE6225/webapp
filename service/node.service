@@ -18,9 +18,6 @@ User=ec2-user
 ExecStart= /usr/bin/node /home/ec2-user/index.js
 
 
-
-
-
 [Install]
 WantedBy=multi-user.target
 
