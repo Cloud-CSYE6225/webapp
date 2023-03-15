@@ -39,12 +39,14 @@ app.use(fileUpload({
 //     region: "us-east-1"
 //  }
 
- const uniqueId = uuid.v4();
+ 
 
 
 //AWS.config.update(SESConfig);
 
 const createProductImage =  (request, response) => {
+
+    const uniqueId = uuid.v4();
  
     const [username, password] = basicAuthenticationHandler(request);
 
