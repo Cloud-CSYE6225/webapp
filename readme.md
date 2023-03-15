@@ -1,7 +1,8 @@
-#Assignment1
+#Assignment 1
 
 In this assignment we are creating a backend application which performs CRUD operations of a user using the help of
 different api's.
+
 
 The folder structure is as follows:
 The main script where the server is starting is in index.js.
