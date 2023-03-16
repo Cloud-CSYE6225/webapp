@@ -227,7 +227,7 @@ const getProductImage = (request, response) => {
                                        }
                                                                
                                     }else {
-                                        response.status(400).send('Image with id ' + request.params.imageId + ' not found');
+                                        response.status(404).send('Image with id ' + request.params.imageId + ' not found');
                                     }
                                     
                                   }).catch(error => {
@@ -309,22 +309,35 @@ debugger;
                               
                           
                                 const image_id = request.params.imageId;
-                                images.destroy({
-                                  where: {
-                                    image_id: image_id
-                                  }
-                                }).then(result => {
-                                  images.findAll({
-                                    where: {
-                                      image_id: image_id
+
+                                images.findByPk(image_id).then((image) => {
+                                    if(image.product_id == request.params.productId) {
+
+                                        images.destroy({
+                                            where: {
+                                              image_id: image_id
+                                            }
+                                          }).then(result => {
+                                            images.findAll({
+                                              where: {
+                                                image_id: image_id
+                                              }
+                                            }).then(result => {
+                                              response.status(204).send(result);
+                                    
+                                            })
+                                          }).catch(error => {
+                                            console.log(error);
+                                          });
+
+                                    }else {
+                                        response.status(404).send("Image not found");
                                     }
-                                  }).then(result => {
-                                    response.status(204).send(result);
-                          
-                                  })
-                                }).catch(error => {
-                                  console.log(error);
-                                });
+                                })
+
+                              
+
+
                           
                               });
                            
