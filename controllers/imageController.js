@@ -140,7 +140,7 @@ const createProductImage = (request, response) => {
                         response.status(403).send('Product not added by ' + user.username);
                     }
                 } else {
-                    response.status(400).send('Product with productId ' + request.params.productId + " does not exist");
+                    response.status(404).send('Product with productId ' + request.params.productId + " does not exist");
                 }
 
             })
@@ -198,7 +198,7 @@ const getAllProductImages = (request, response) => {
                         response.status(403).send('Product not added by ' + user.username);
                     }
                 } else {
-                    response.status(400).send('Product with productId ' + request.params.productId + " does not exist");
+                    response.status(404).send('Product with productId ' + request.params.productId + " does not exist");
                 }
 
             })
@@ -206,7 +206,7 @@ const getAllProductImages = (request, response) => {
 
 
         } else {
-            response.status(401).send('No user found');
+            response.status(404).send('No user found');
         }
 
     });
@@ -267,7 +267,7 @@ const getProductImage = (request, response) => {
                         response.status(403).send('Product not added by ' + user.username);
                     }
                 } else {
-                    response.status(400).send('Product with productId ' + request.params.productId + " does not exist");
+                    response.status(404).send('Product with productId ' + request.params.productId + " does not exist");
                 }
 
             })
@@ -275,7 +275,7 @@ const getProductImage = (request, response) => {
 
 
         } else {
-            response.status(401).send('No user found');
+            response.status(404).send('No user found');
         }
 
     });
@@ -373,7 +373,7 @@ const deleteProductImage = async (request, response) => {
                         response.status(403).send('Product not added by ' + user.username);
                     }
                 } else {
-                    response.status(400).send('Product with productId ' + request.params.productId + " does not exist");
+                    response.status(404).send('Product with productId ' + request.params.productId + " does not exist");
                 }
 
             })

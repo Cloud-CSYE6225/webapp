@@ -418,26 +418,7 @@ const deleteProduct = (request, response) => {
                                 // });
                                 // const bucketName = process.env.S3_BUCKET_NAME;
 
-                                var deleteParam = {
-                                    Bucket: process.env.S3_BUCKET_NAME,
-                                    Prefix: `${request.params.productId}/`
-
-                                };
-                                console.log(deleteParam.Key)
-                                s3.listObjectsV2(deleteParam, function (err, data) {
-                                    if (err) {
-                                        console.log(err);
-                                        return;
-                                    }
-                                    var objects = data.Contents;
-                                    objects.forEach(function (object) {
-                                        var deleteObjectParam = { Bucket: deleteParam.Bucket, Key: object.Key };
-                                        s3.deleteObject(deleteObjectParam, function (err, data) {
-                                            data && console.log("delete success", data.Location)
-
-                                        })
-                                    })
-                                })
+                            
 
                                 products.destroy({ where: { id: request.params.productId } }).then((result) => {
                                     response.status(204).send('Products deleted');
