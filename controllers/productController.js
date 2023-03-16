@@ -419,6 +419,24 @@ const deleteProduct = (request, response) => {
                                 // const bucketName = process.env.S3_BUCKET_NAME;
 
                             
+                                var listobjectsParam = {
+                                    Bucket:process.env.S3_BUCKET_NAME,
+                                    Prefix: `${request.params.productId}/`
+                                
+                                  };
+                                  const listedobjects =  s3.listObjectsV2(listobjectsParam).promise();
+                                  listedobjects.Contents.forEach(function(object) 
+                                  {
+                                    var deleteParam = { 
+                                      Bucket:process.env.S3_BUCKET_NAME, 
+                                      Key: object.Key 
+                                    };
+                                    s3.deleteObject(deleteParam, function(err, data) {
+                                      data && console.log("delete success", data.Contents)
+                           
+                                    })
+                                  })
+                            
 
                                 products.destroy({ where: { id: request.params.productId } }).then((result) => {
                                     response.status(204).send('Products deleted');
