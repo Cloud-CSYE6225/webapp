@@ -45,7 +45,7 @@ const createProduct = (request, response) => {
         return response.status(401).json("Please provide Username and Password");
     }
 
-    
+
    
 
     let returnValue = null;
@@ -406,10 +406,26 @@ const deleteProduct = (request, response) => {
 
                     passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
                         if (valueToCompare) {
+
+                            var deleteParam = {
+                                Bucket: process.env.S3_BUCKET_NAME,
+                                Key: `${request.params.productId}/`
+
+                            };
+
+                            s3.deleteObject(deleteParam, function (err, data) {
+
+                                data && console.log("delete success", data.Location)
+
+                            });
+
                             products.destroy({where:{id :request.params.productId}}).then((result) => {
-                                response.status(204).send('Data deleted');
+                                response.status(204).send('Products deleted');
                             }).catch((error) => {
                                 response.status(400).send('Data destroy failed');
+                            })
+                            images.destroy({where:{product_id:request.params.productId}}).then((result) => {
+                                response.status(204).send("Images Deleted")
                             })
                         }else {
                             response.status(401).send('Invalid Password');
