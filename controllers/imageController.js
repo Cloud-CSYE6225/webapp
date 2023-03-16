@@ -74,7 +74,7 @@ users.findOne({ where: { username: username } }).then((user) => {
         
                             const UploadParams = {
                                 Bucket: process.env.S3_BUCKET_NAME,
-                                Key: `${request.file.originalname}--${uniqueId}`,
+                                Key: `${request.params.productId}/${request.file.originalname}--${uniqueId}`,
                                Body: Buffer.from(request.file.path),
                                 ContentType: request.file.mimetype,
                                 ACL: 'private'
@@ -157,7 +157,7 @@ const getAllProductImages = (request, response) => {
                         passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
                             if (valueToCompare) {
             
-                                images.findAll({}).then(result => {
+                                images.findAll({where:{product_id:request.params.productId}}).then(result => {
                                    // console.log(result);
                                     response.status(200).send(result);
                               
@@ -220,7 +220,12 @@ const getProductImage = (request, response) => {
                                   ).then(result => {
                                     if(result){
                                        // console.log(result);
-                                    response.status(200).send(result);                              
+                                       if(result.product_id == request.params.productId){
+                                         response.status(200).send(result);   
+                                       }else {
+                                        response.status(404).send("Image not found");
+                                       }
+                                                               
                                     }else {
                                         response.status(400).send('Image with id ' + request.params.imageId + ' not found');
                                     }
@@ -280,8 +285,8 @@ debugger;
                         if (valueToCompare) {
         
                             const imageId=  await getImageId(request.params.imageId);
-                            console.log("hello");
-                            console.log(!imageId);
+                           // console.log("hello");
+                          //  console.log(!imageId);
                             if(!imageId)
                             {
                               return response.status(404).json({
@@ -294,12 +299,12 @@ debugger;
                         
                             var deleteParam = {
                                 Bucket: process.env.S3_BUCKET_NAME,
-                                Key: filename
+                                Key: `${request.params.productId}/${filename}`
                           
                             };
                         
                             s3.deleteObject(deleteParam, function (err, data) {
-                                //console.log("HIHIHIIHIH")
+                                
                                 data && console.log("delete success", data.Location)
                               
                           
@@ -321,7 +326,7 @@ debugger;
                                   console.log(error);
                                 });
                           
-                              })
+                              });
                            
                         } else {
                             response.status(401).send(res.generate(true,'Invalid Password',401,{}));
