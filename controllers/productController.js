@@ -407,17 +407,47 @@ const deleteProduct = (request, response) => {
                     passwordCheckFunction(hashPassword, password).then((valueToCompare) => {
                         if (valueToCompare) {
 
-                            var deleteParam = {
-                                Bucket: process.env.S3_BUCKET_NAME,
-                                Key: `${request.params.productId}/`
+                            // var deleteParam = {
+                            //     Bucket: process.env.S3_BUCKET_NAME,
+                            //     Key: `/${request.params.productId}`
 
-                            };
+                            // };
 
-                            s3.deleteObject(deleteParam, function (err, data) {
+                            // s3.deleteObject(deleteParam, function (err, data) {
 
-                                data && console.log("delete success", data.Location)
+                            //     data && console.log("delete success", data.Location)
 
-                            });
+                            // });
+                           // const bucketName = process.env.S3_BUCKET_NAME;
+
+                            function emptyBucket(bucketName,callback){
+                                var params = {
+                                  Bucket: bucketName,
+                                  Prefix: `${request.params.productId}/`
+                                };
+                              
+                                s3.listObjects(params, function(err, data) {
+                                  if (err) return callback(err);
+                              
+                                  if (data.Contents.length == 0) callback();
+                              
+                                  deleteParams = {Bucket: bucketName};
+                                  deleteParams.Delete = {Objects:[]};
+                                  
+                                  data.Contents.forEach(function(content) {
+                                    deleteParams.Delete.Objects.push({Key: content.Key});
+                                  });
+                              
+                                  s3.deleteObjects(deleteParams, function(err, data) {
+                                    if (err) return callback(err);
+                                    if (data.IsTruncated) {
+                                      emptyBucket(process.env.S3_BUCKET_NAME, callback);
+                                    } else {
+                                      callback();
+                                    }
+                                  });
+                                });
+                              }
 
                             products.destroy({where:{id :request.params.productId}}).then((result) => {
                                 response.status(204).send('Products deleted');
