@@ -6,6 +6,8 @@ sleep 30
 
 sudo yum update -y
 
+sudo yum upgrade -y
+
 
 
 sudo yum install -y gcc-c++ make
@@ -22,7 +24,8 @@ sudo unzip /home/ec2-user/script/webApp.zip
 sudo chown ec2-user:ec2-user script
 sudo su
 cd /home/ec2-user/script
+sudo npm init
 sudo npm install
-sudo npm install bcrypt
+sudo npm install bcrypt --save
 sudo npm update -g node-gyp
 
