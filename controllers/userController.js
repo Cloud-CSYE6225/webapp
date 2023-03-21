@@ -19,7 +19,7 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages');
 
 
-const metricCounter = new statsD();
+const metricCounter = new statsD('localhost', 8125);
 
 
 
@@ -28,6 +28,8 @@ const metricCounter = new statsD();
 const createUser = (request, response) => {
 
     var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+
+    metricCounter.increment(request.method + '' + request.path);
 
     if(request.body.username){
     users.findOne({where:{username:request.body.username}}).then((result) => {
