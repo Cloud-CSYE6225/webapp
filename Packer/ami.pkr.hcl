@@ -123,7 +123,7 @@ build {
   //   }
 
   provisioner "shell" {
-    inline = ["sudo chmod o+x /home/ec2-user/tmp/cloudwatch.sh", "sudo /home/ec2-user/tmp/cloudwatch.sh"]
+    inline = ["sudo chmod o+x /tmp/cloudwatch.sh", "sudo /tmp/cloudwatch.sh"]
   }
 
 
