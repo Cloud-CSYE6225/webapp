@@ -39,16 +39,21 @@ userModel.sync().then((result) => {
    productModel.sync().then((result) => {
      productModel.belongsTo(userModel, {foreignKey: 'owner_user_id'});
      console.log('Products Table created');
+     logger.info('Products table created');
      imageModel.sync().then((result) => {
-      console.log('Image table created')
+      console.log('Image table created');
+      logger.info('Image table created');
      }).catch((error) => {
       console.log('Error in creating Image table');
+      logger.error('Error in creating Image table');
      })
   }).catch((error) => {
      console.log('Error in creating product table');
+     logger.error('Error in creating product table');
   });
 }).catch((error) => {
    console.log('Error in creating user table');
+   logger.error('Error in creating user table');
    console.log(error);
 });
 
