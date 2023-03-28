@@ -6,7 +6,7 @@ variable "aws_access_key" {
 
 variable "aws_region" {
   type    = string
-  default = "us-east-1"
+  default = ""
 }
 
 variable "aws_secret_key" {
@@ -94,7 +94,7 @@ build {
     inline = ["sudo chmod +x /tmp/node.sh", "sudo /tmp/node.sh"]
   }
 
-   provisioner "shell" {
+  provisioner "shell" {
     inline = ["sudo chmod +x /tmp/cloudwatch.sh", "sudo /tmp/cloudwatch.sh"]
   }
 
