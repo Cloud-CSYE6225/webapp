@@ -38,7 +38,7 @@ let userFlag = false;
 
 const createProduct = (request, response) => {
 
-    metricCounter.increment(request.method + '' + request.path);
+    metricCounter.increment("createProduct");
 
     const [username, password] = basicAuthenticationHandler(request);
     const { name, description, sku, manufacturer, quantity } = request.body;
@@ -140,14 +140,19 @@ const getProduct = (request, response) => {
 
     //console.log('Hello-pr');
 
+    metricCounter.increment("getProduct");
+
     products.findByPk(request.params.productId).then((result) => {
         if (result) {
+            logger.info("Product fetched");
             return response.status(200).send(res.generate(false, 'Product fetched', 200, result));
+           
         } else {
             return response.status(400).send(res.generate(true, 'Product with productId ' + request.params.productId + ' does not exist', 400, result));
         }
 
     }).catch((error) => {
+        logger.info("product fetch failed");
         return response.status(400).send(res.generate(true, 'Product fetch failed', 400, {}));
     })
 
@@ -156,6 +161,8 @@ const getProduct = (request, response) => {
 //PUT Method
 
 const updateProduct = (request, response) => {
+
+    metricCounter.increment("updateProduct");
 
     const [username, password] = basicAuthenticationHandler(request);
 
@@ -391,6 +398,8 @@ const intermediateMethodToUpdate = (request, response, username) => {
 //Delete Method
 
 const deleteProduct = (request, response) => {
+
+    metricCounter.increment("deleteProduct");
 
     const [username, password] = basicAuthenticationHandler(request);
 
