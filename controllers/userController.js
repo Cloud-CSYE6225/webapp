@@ -29,7 +29,8 @@ const createUser = (request, response) => {
 
     var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
 
-    metricCounter.increment(request.method + '' + request.path);
+   // metricCounter.increment(request.method + '' + request.path);
+   metricCounter.increment("createUser");
 
     if(request.body.username){
     users.findOne({where:{username:request.body.username}}).then((result) => {
@@ -99,7 +100,8 @@ const createUser = (request, response) => {
 const getUser = (request, response) =>{
     const [username, password] = basicAuthenticationHandler(request);
 
-    metricCounter.increment(request.method + '' + request.path);
+    //metricCounter.increment(request.method + '' + request.path);
+    metricCounter.increment("getUser");
 
         if (!username || !password) {
             return response.status(401).json("Please provide Username and Password");
@@ -142,6 +144,8 @@ const getUser = (request, response) =>{
 
 const editUser = (request, response) => {
     const [username, password] = basicAuthenticationHandler(request);
+
+    metricCounter.increment("editUser");
 
     if (!username || !password) {
         return response.status(401).json("Please provide Username and Password");
