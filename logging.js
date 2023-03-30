@@ -13,7 +13,7 @@ const logger = createLogger({
     format: format.combine(format.timestamp(), format.json()),
     levels: logLevels,
    // transports: [new transports.File({ filename: '/home/ec2-user/script/webapp.log' })],
-   transports: [new transports.File({ filename: 'home/ec2-user/script/webapp.log' })],
+   transports: [new transports.File({ filename: 'webapp.log' })],
 });
 
 module.exports = logger;
