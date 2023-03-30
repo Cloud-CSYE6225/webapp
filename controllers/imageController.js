@@ -2,7 +2,7 @@ const sequelize = require('../db');
 const logger = require('../logging');
 const uuid = require('uuid');
 const res = require('../utils/responseLib');
-//const statsD = require('node-statsd');
+const statsD = require('node-statsd');
 const {
     emailValidation,
     hashingOfPassword,
