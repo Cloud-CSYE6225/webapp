@@ -1,4 +1,4 @@
-#Assignment 1
+#Assignment1
 
 In this assignment we are creating a backend application which performs CRUD operations of a user using the help of
 different api's.
