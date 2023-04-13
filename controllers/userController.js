@@ -261,9 +261,15 @@ const intermediateMethodToUpdate = (request, response, username) => {
     return true;
 }
 
-const getHealth = (request, response) => {
+const getHealthz = (request, response) => {
     logger.info("Health of the server is OK");
     metricCounter.increment("Healthz");
+    return response.status(200).json("Healthz is OK");
+}
+
+const getHealth = (request, response) => {
+    logger.info("Health of the server is OK");
+    metricCounter.increment("Health");
     return response.status(200).json("Health is OK");
 }
 
