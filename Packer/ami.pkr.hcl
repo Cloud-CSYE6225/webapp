@@ -66,6 +66,12 @@ source "amazon-ebs" "Custom_AMI" {
 }
 
 build {
+
+  post-processor "manifest" {
+    output = "manifest.json"
+
+  }
+
   sources = ["source.amazon-ebs.Custom_AMI"]
 
 
@@ -132,3 +138,6 @@ build {
   }
 
 }
+
+
+

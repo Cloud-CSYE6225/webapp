@@ -4,6 +4,9 @@ const userController = require('../controllers/userController');
 const userRouter = express.Router();
 
 userRouter.route('/')
+    .get(userController.getHealthz);
+
+userRouter.route('/')
     .get(userController.getHealth);
 
 userRouter.route('/')
