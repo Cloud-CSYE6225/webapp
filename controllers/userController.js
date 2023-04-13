@@ -270,7 +270,7 @@ const getHealthz = (request, response) => {
 const getHealth = (request, response) => {
     logger.info("Health of the server is OK");
     metricCounter.increment("Health");
-    return response.status(200).json("Health is OK");
+    return response.status(200).json("Health is OK -- check1");
 }
 
 

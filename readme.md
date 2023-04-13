@@ -123,3 +123,15 @@ This assignment should ensure that our app runs in the ec2 instance and get conn
 
 Assignment6
 
+Assignment9
+
+In this assignment we are modifying the workflow to complete the cicd actions to the full extent.
+
+The ami-id which is created after running the packer build is taken from manifest.json and is stored
+in the github workflow outputs.
+
+We are creating another job in the workflow which will run only after the first job is passed.
+The 2nd job which is called auto deployment is takes the ami-id in the outputs, autoscaling group name and the launch template id from the github variables to refresh the launch template instance and autoscaling group refresh.
+
+After the refresh is done our latest changes will reflect in the application.
+
