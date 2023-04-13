@@ -328,6 +328,7 @@ module.exports = {
     createUser,
     getUser,
     editUser,
-    getHealth
+    getHealth,
+    getHealthz
  
 }
