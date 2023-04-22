@@ -12,8 +12,8 @@ const routes = (app) => {
     app.use("/v1/user", userRouter);
     app.use("/v1/product", productRouter);
    // app.use("/v1/product/:productId/image", imageRouter);
-    app.use("/healthz",userRouter);
-    app.use("/healthz",productRouter);
+    app.use("/deepak",userRouter);
+    app.use("/deepak",productRouter);
     app.use("/health", userRouter);
 
   
